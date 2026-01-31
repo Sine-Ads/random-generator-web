@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Randomizer</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 350px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
+            text-align: center;
+            letter-spacing: -0.025em;
+            color: var(--primary);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            ring: 2px solid var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #result-container {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #334155;
+            text-align: center;
+        }
+
+        #result-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #94a3b8;
+        }
+
+        #result {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            margin-top: 0.5rem;
+            display: block;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Animation for the number appearing */
+        .pop {
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Number Generator</h2>
+    
+    <div class="input-group">
+        <label for="minVal">Minimum</label>
+        <input type="number" id="minVal" value="1">
+    </div>
+
+    <div class="input-group">
+        <label for="maxVal">Maximum</label>
+        <input type="number" id="maxVal" value="100">
+    </div>
+    
+    <button onclick="generateRandom()">Generate Number</button>
+    
+    <div id="result-container" style="display: none;">
+        <span id="result-label">The result is</span>
+        <span id="result" class="">--</span>
+    </div>
+</div>
+
+<script>
+    function generateRandom() {
+        const a = parseInt(document.getElementById('maxVal').value);
+        const b = parseInt(document.getElementById('minVal').value);
+        const resultDiv = document.getElementById('result');
+        const container = document.getElementById('result-container');
+
+        if (isNaN(a) || isNaN(b)) return;
+        if (b > a) {
+            alert("Min cannot be larger than Max!");
+            return;
+        }
+
+        // Logic from your Randomnumber.cpp
+        let nums = [];
+        for (let i = b; i <= a; i++) {
+            nums.push(i);
+        }
+
+        const randomIndex = Math.floor(Math.random() * nums.length);
+        const pickedNumber = nums[randomIndex];
+
+        // UI Updates
+        container.style.display = 'block';
+        resultDiv.innerText = pickedNumber;
+        
+        // Trigger animation
+        resultDiv.classList.remove('pop');
+        void resultDiv.offsetWidth; // Force reflow
+        resultDiv.classList.add('pop');
+    }
+</script>
+
+</body>
+</html>
